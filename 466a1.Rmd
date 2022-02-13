@@ -1,0 +1,1070 @@
+---
+title: "466A1"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+```{r}
+library('nleqslv')
+```
+ 
+4(a)
+
+```{r}
+#0.5 Mar 22
+coupon <- 0.5
+#bond prices from 1/10 to 1/21
+p <- c(100.04,100.03,	100.03,	100.03,	100.02,	100.02,	100,	100,	100,	100.01)
+#time to maturity
+t1 <- 50/365
+
+#find the dirty price
+dp1 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365 #12 days with 10 prices
+  dp1 <- c(dp1, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 50/365
+ytm_Mar22 <- c()
+for (val in dp1) {
+  
+  fn <- function(ytm){
+    #(100+coupon)/(1+ytm[1])^t-val
+    (100+coupon)*exp((-ytm[1])*t1)-val
+  }
+  #calculate ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Mar22 <- c(ytm_Mar22, new) 
+}
+
+ytm_Mar22
+
+```
+
+```{r}
+#0.25 Aug 22
+coupon <- 0.25
+#bond prices from 1/10 to 1/21
+p <- c(99.8,	99.79,	99.78,	99.77,	99.76,	99.72,	99.7,	99.7,	99.72,	99.74)
+#time to maturity
+t1 <- 20/365
+t2 <- (20+6*30)/365
+
+#find the dirty price
+dp2 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365 #12 days with 10 prices
+  dp2 <- c(dp2, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 20/365
+
+ytm_Aug22 <- c()
+for (val in dp2) {
+  
+  fn <- function(ytm){
+    
+    (0.5*coupon)*exp(-ytm[1]*t1) + (100+coupon*0.5)*exp(-ytm[1]*t2) -val
+  }
+ #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Aug22 <- c(ytm_Aug22, new) 
+}
+
+ytm_Aug22
+
+```
+
+
+```{r}
+#1.75 Mar 23
+coupon <- 1.75
+#bond prices from 1/10 to 1/21
+p <- c(100.94,	100.93,	100.91,	100.88,	100.86,	100.76,	100.71,	100.71,	100.71,	100.75)
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1 #one year from Mar 22
+
+#find the dirty price
+dp3 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365 #12 days with 10 prices
+  dp3 <- c(dp3, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 50/365
+
+ytm_Mar23 <- c()
+for (val in dp3) {
+  
+  fn <- function(ytm){
+    
+    (0.5*coupon)*exp(-ytm[1]*t1) + (coupon*0.5)*exp(-ytm[1]*t2) + (100+coupon*0.5)*exp(-ytm[1]*t3) -val
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Mar23 <- c(ytm_Mar23, new) 
+}
+
+ytm_Mar23
+
+```
+
+```{r}
+#0.25 Aug 23
+coupon <- 0.25
+#bond prices from 1/10 to 1/21
+p <- c(98.81,	98.8,	98.78,	98.76,	98.74,	98.61,	98.55,	98.55,	98.56,	98.61)
+
+#time to maturity
+t1 <- 20/365
+t2 <- (20+6*30)/365
+t3 <- 20/365+1
+t4 <- (20+6*30)/365+1
+
+#find the dirty price
+dp4 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365 #12 days with 10 prices
+  dp4 <- c(dp4, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 20/365
+
+ytm_Aug23 <- c()
+for (val in dp4) {
+  
+  fn <- function(ytm){ 
+    
+    (0.5*coupon)*exp(-ytm[1]*t1) + (coupon*0.5)*exp(-ytm[1]*t2) + (coupon*0.5)*exp(-ytm[1]*t3)+ (100+coupon*0.5)*exp(-ytm[1]*t4) -val
+  }
+  #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Aug23 <- c(ytm_Aug23, new) 
+}
+
+ytm_Aug23
+```
+
+```{r}
+#2.25 Mar 24
+coupon <- 2.25
+#bond prices from 1/10 to 1/21
+p <- c(101.82,	102.3,	102.26,	102.22,	102.18,	101.99,	101.91,	101.9,	101.88,	101.97
+)
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+
+#find the dirty price
+dp5 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365 #12 days with 10 prices
+  dp5 <- c(dp5, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 50/365
+
+ytm_Mar24 <- c()
+for (val in dp5) {
+  
+  fn <- function(ytm){
+    
+    (0.5*coupon)*exp(-ytm[1]*t1) + (coupon*0.5)*exp(-ytm[1]*t2) + (coupon*0.5)*exp(-ytm[1]*t3)+ (coupon*0.5)*exp(-ytm[1]*t4)+(100+coupon*0.5)*exp(-ytm[1]*t5) -val
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Mar24 <- c(ytm_Mar24, new) 
+}
+
+ytm_Mar24
+```
+
+```{r}
+#1.50 Sep 24
+coupon <- 1.50
+#bond prices from 1/10 to 1/21
+p <- c(100.56,	100.63,	100.62,	100.58,	100.52,	100.29,	100.21,	100.15,	100.17,	100.27)
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2 #6 months from March
+
+#find the dirty price
+dp6 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365 #12 days with 10 prices
+  dp6 <- c(dp6, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 50/365
+
+ytm_Sep24 <- c()
+for (val in dp6) {
+  
+  fn <- function(ytm){
+    
+    (0.5*coupon)*exp(-ytm[1]*t1) + (coupon*0.5)*exp(-ytm[1]*t2) + (coupon*0.5)*exp(-ytm[1]*t3)+(coupon*0.5)*exp(-ytm[1]*t4)+(coupon*0.5)*exp(-ytm[1]*t5)+(100+coupon*0.5)*exp(-ytm[1]*t6) -val
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Sep24 <- c(ytm_Sep24, new) 
+}
+
+ytm_Sep24
+```
+
+```{r}
+#1.25 Mar 25
+coupon <- 1.25
+#bond prices from 1/10 to 1/21
+p <- c(99.64,	99.67	,99.61,	99.59,	99.49,	99.25,	99.12,	99.11,	99.1,	99.26)
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2
+t7 <- 50/365+3
+
+#find the dirty price
+dp7 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365 #12 days with 10 prices
+  dp7 <- c(dp7, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 50/365
+
+ytm_Mar25 <- c()
+for (val in dp7) {
+  
+  fn <- function(ytm){
+    
+    (0.5*coupon)*exp(-ytm[1]*t1) + (coupon*0.5)*exp(-ytm[1]*t2) + (coupon*0.5)*exp(-ytm[1]*t3)+(coupon*0.5)*exp(-ytm[1]*t4)+(coupon*0.5)*exp(-ytm[1]*t5)+(coupon*0.5)*exp(-ytm[1]*t6)+(100+coupon*0.5)*exp(-ytm[1]*t7) -val
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Mar25 <- c(ytm_Mar25, new) 
+}
+
+ytm_Mar25
+```
+
+```{r}
+#0.5 Sep 25
+coupon <- 0.5
+#bond prices from 1/10 to 1/21
+p <- c(96.81,	96.72,	96.77	,96.77,	96.68	,	96.43	,96.26,	96.15,	96.19,	96.31
+)
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2
+t7 <- 50/365+3
+t8 <- (50+6*30)/365+3
+
+#find the dirty price
+dp8 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365#12 days with 10 prices
+  dp8 <- c(dp8, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 50/365
+
+ytm_Sep25 <- c()
+for (val in dp8) {
+  
+  fn <- function(ytm){
+    
+    (0.5*coupon)*exp(-ytm[1]*t1) + (coupon*0.5)*exp(-ytm[1]*t2) + (coupon*0.5)*exp(-ytm[1]*t3)+(coupon*0.5)*exp(-ytm[1]*t4)+(coupon*0.5)*exp(-ytm[1]*t5)+(coupon*0.5)*exp(-ytm[1]*t6)+(coupon*0.5)*exp(-ytm[1]*t7)+(100+coupon*0.5)*exp(-ytm[1]*t8) -val
+  
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Sep25 <- c(ytm_Sep25, new) 
+}
+
+ytm_Sep25
+```
+
+```{r}
+#0.25 Mar 26
+coupon <- 0.25
+#bond prices from 1/10 to 1/21
+p <- c(95.11,	95.17	,95.12,	95.14,	95.04	,94.75,	94.53,	94.5,	94.52,	94.7
+
+)
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2
+t7 <- 50/365+3
+t8 <- (50+6*30)/365+3
+t9 <- 50/365+4
+
+#find the dirty price
+dp9 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365 #12 days with 10 prices
+  dp9 <- c(dp9, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 50/365
+
+ytm_Mar26 <- c()
+for (val in dp9) {
+  
+  fn <- function(ytm){
+    
+    (0.5*coupon)*exp(-ytm[1]*t1) + (coupon*0.5)*exp(-ytm[1]*t2) + (coupon*0.5)*exp(-ytm[1]*t3)+(coupon*0.5)*exp(-ytm[1]*t4)+(coupon*0.5)*exp(-ytm[1]*t5)+(coupon*0.5)*exp(-ytm[1]*t6)+(coupon*0.5)*exp(-ytm[1]*t7)+(coupon*0.5)*exp(-ytm[1]*t8)+(100+coupon*0.5)*exp(-ytm[1]*t9) -val
+  
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Mar26 <- c(ytm_Mar26, new) 
+}
+
+ytm_Mar26
+```
+
+```{r}
+#1.00 Sep 26
+coupon <- 1.00
+#bond prices from 1/10 to 1/21
+p <- c(97.66,	97.7,	97.67,	97.6,	97.59	,	97.24,	97.02	,96.96,	97,	97.22
+)
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2
+t7 <- 50/365+3
+t8 <- (50+6*30)/365+3
+t9 <- 50/365+4
+t10 <- (50+6*30)/365+4
+
+#find the dirty price
+dp10 <- c()
+for (price in p) {
+  
+  n <- price + coupon*(6*30/365-t1)
+  t1 <- t1 - 1.2/365#12 days with 10 prices
+  dp10 <- c(dp10, n)
+}
+
+#calculate 10 different ytm's for each day's price
+t1 <- 50/365
+
+ytm_Sep26 <- c()
+for (val in dp10) {
+  
+  fn <- function(ytm){
+    
+    (0.5*coupon)*exp(-ytm[1]*t1) + (coupon*0.5)*exp(-ytm[1]*t2) + (coupon*0.5)*exp(-ytm[1]*t3)+(coupon*0.5)*exp(-ytm[1]*t4)+(coupon*0.5)*exp(-ytm[1]*t5)+(coupon*0.5)*exp(-ytm[1]*t6)+(coupon*0.5)*exp(-ytm[1]*t7)+(coupon*0.5)*exp(-ytm[1]*t8)+(coupon*0.5)*exp(-ytm[1]*t9)+(100+coupon*0.5)*exp(-ytm[1]*t10) -val
+  
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  ytm_Sep26 <- c(ytm_Sep26, new) 
+}
+
+ytm_Sep26
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+
+time <- as.factor(c("Mar22","Aug22","Mar23","Aug23","Mar24","Sep24","Mar25","Sep25","Mar26","Sep26"))
+
+dataframe_4a <-data.frame(
+   ytm_Mar22,
+    ytm_Aug22, 
+   ytm_Mar23,
+     ytm_Aug23,
+   ytm_Mar24,
+   ytm_Sep24,
+   ytm_Mar25,
+  ytm_Sep25,
+   ytm_Mar26,
+   ytm_Sep26
+)
+df_transpose = t(dataframe_4a)
+rownames(df_transpose) <- NULL
+
+
+new_df <-data.frame(
+    time,
+   df_transpose[,1],
+   df_transpose[,2],
+   df_transpose[,3],
+   df_transpose[,4],
+   df_transpose[,5],
+   df_transpose[,6],
+   df_transpose[,7],
+   df_transpose[,8],
+   df_transpose[,9],
+   df_transpose[,10])
+
+
+colnames(new_df) <- c("Time","Mar22","Aug22","Mar23","Aug23","Mar24","Sep24","Mar25","Sep25","Mar26","Sep26")
+
+colors <- c("Jan10"="red","Jan11"="orange","Jan12"="yellow","Jan13"="green","Jan14"="blue","Jan17"="purple","Jan18"="pink","Jan19"="black","Jan20"="brown","Jan21"="grey")
+
+ggplot(new_df, aes(x=Time)) + 
+  geom_line(aes(y=Mar22, group=1, color="Jan10")) +
+  geom_line(aes(y=Aug22, group=1, color="Jan11")) + 
+  geom_line(aes(y=Mar23, group=1, color="Jan12")) +
+  geom_line(aes(y=Aug23, group=1, color="Jan13")) +
+  geom_line(aes(y=Mar24, group=1, color="Jan14")) +
+  geom_line(aes(y=Sep24, group=1, color="Jan17")) +
+  geom_line(aes(y=Mar25, group=1, color="Jan18")) +
+  geom_line(aes(y=Sep25, group=1, color="Jan19")) +
+  geom_line(aes(y=Mar26, group=1, color="Jan20")) +
+  geom_line(aes(y=Sep26, group=1, color="Jan21")) + 
+  scale_x_discrete(limits = c("Mar22","Aug22","Mar23","Aug23","Mar24","Sep24","Mar25","Sep25","Mar26","Sep26")) +
+  labs(x = "Time", y = "YTM", color = 'Date of data') +
+  scale_color_manual(values = colors) +
+  theme_bw() +
+  ggtitle("Yield curve") +
+   theme(plot.title = element_text(hjust = 0.5))+
+
+  geom_point(aes(1, 0.0231), color = "green") +
+  geom_point(aes(2, 0.00671), color = "green") +
+  geom_point(aes(3, 0.00962), color = "green") +
+  geom_point(aes(4, 0.01058), color = "green") +
+  geom_point(aes(5, 0.01187), color = "green") +
+  geom_point(aes(6, 0.01273), color = "green") +
+  geom_point(aes(7, 0.01378), color = "green") +
+  geom_point(aes(8, 0.01411), color = "green") +
+  geom_point(aes(9, 0.01459), color = "green") +
+  geom_point(aes(10, 0.01533), color = "green") +
+  geom_text(aes(1, 0.0231), label = "0.0231",nudge_y = -.004, nudge_x = -.001 , size = 3) +
+  geom_text(aes(2, 0.00671), label = "0.00672",nudge_y = -.001, size = 3)+
+  geom_text(aes(3, 0.00962), label = "0.00962",nudge_y = -.001, size = 3)+
+  geom_text(aes(4, 0.01058), label = "0.01058",nudge_y = -.001, size = 3)+
+  geom_text(aes(5, 0.01187), label = "0.01187",nudge_y = -.001, size = 3)+
+  geom_text(aes(6, 0.01273), label = "0.01273",nudge_y = -.001, size = 3)+
+  geom_text(aes(7, 0.01378), label = "0.01378",nudge_y = -.001, size = 3)+
+  geom_text(aes(8, 0.01411), label = "0.01411",nudge_y = -.001, size = 3)+
+  geom_text(aes(9, 0.01459), label = "0.01459",nudge_y = -.001, size = 3)+
+  geom_text(aes(10, 0.01533), label = "0.01533",nudge_y = -.001, size = 3)
+
+ #c('0.023092468', '0.006718330', '0.009626862', '0.010575819', '0.011878776', '0.012730183', '0.013779693', '0.014114817','0.014594873', '0.015338790')
+```
+
+4(b)
+
+```{r}
+#0.5 Mar 22
+coupon <- 0.5
+t1=50/365
+#calculate 10 different spot rates' for each day's price
+spr1 <- c()
+for (val in dp1) {
+  
+  fn <- function(spr1){
+    
+    (100+coupon)*exp((-spr1[1])*t1)-val
+  }
+   #calculate spr
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  spr1 <- c(spr1, new) 
+}
+
+spr1
+
+```
+
+
+```{r}
+#0.25 Aug 22
+coupon <- 0.25
+
+#time to maturity
+t1 <- 20/365
+t2 <- (20+6*30)/365
+
+spr2 <- c()
+for (val in c(1:10)) {
+  
+  fn <- function(spr2){
+    
+    (coupon*0.5)*exp(-spr1[val]*t1) + (100+coupon*0.5)*exp (-spr2[1]*t2) - dp2[val]
+  }
+ #calculate spr
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  spr2 <- c(spr2, new) 
+}
+
+spr2
+```
+
+
+```{r}
+#1.75 Mar 23
+coupon <- 1.75
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1 
+
+#calculate 10 different spot rates' for each day's price
+
+spr3 <- c()
+for (val in c(1:10)) {
+  
+  fn <- function(spr3){
+    
+    (0.5*coupon)*exp(spr1[val]*t1) + (coupon*0.5)*exp(-spr2[val]*t2) + (100+coupon*0.5)*exp(-spr3[1]*t3) - dp3[val]
+  }
+  #solve the equation to find spr
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  spr3 <- c(spr3, new) 
+}
+
+spr3
+```
+
+```{r}
+#0.25 Aug 23
+coupon <- 0.25
+
+#time to maturity
+t1 <- 20/365
+t2 <- (20+6*30)/365
+t3 <- 20/365+1
+t4 <- (20+6*30)/365+1
+
+
+#calculate 10 different spot rates for each day's price
+
+spr4 <- c()
+for (val in c(1:10)) {
+  
+  fn <- function(spr4){ 
+    
+    (0.5*coupon)*exp(-spr1[val]*t1) + (coupon*0.5)*exp(-spr2[val]*t2) + (coupon*0.5)*exp(-spr3[val]*t3)+ (100+coupon*0.5)*exp(-spr4[1]*t4) - dp4[val]
+  }
+  #solve the equation to find spr
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  spr4 <- c(spr4, new) 
+}
+
+spr4
+```
+
+```{r}
+#2.25 Mar 24
+coupon <- 2.25
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+
+spr5 <- c()
+for (val in c(1:10)) {
+  
+  fn <- function(spr5){
+    
+    (0.5*coupon)*exp(-spr1[val]*t1) + (coupon*0.5)*exp(-spr2[val]*t2) + (coupon*0.5)*exp(-spr3[val]*t3)+ (coupon*0.5)*exp(-spr4[val]*t4)+(100+coupon*0.5)*exp(-spr5[1]*t5) - dp5[val]
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+ spr5 <- c(spr5, new) 
+}
+
+spr5
+```
+
+
+```{r}
+#1.50 Sep 24
+coupon <- 1.50
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2 #6 months from March
+
+spr6 <- c()
+for (val in c(1:10)) {
+  
+  fn <- function(spr6){
+    
+    (0.5*coupon)*exp(-spr1[val]*t1) + (coupon*0.5)*exp(-spr2[val]*t2) + (coupon*0.5)*exp(-spr3[val]*t3)+(coupon*0.5)*exp(-spr4[val]*t4)+(coupon*0.5)*exp(-spr5[val]*t5)+(100+coupon*0.5)*exp(-spr6[1]*t6)-dp6[val]
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  spr6 <- c(spr6, new) 
+}
+
+spr6
+```
+
+
+```{r}
+#1.25 Mar 25
+coupon <- 1.25
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2
+t7 <- 50/365+3
+
+
+spr7 <- c()
+for (val in c(1:10)) {
+  
+  fn <- function(spr7){
+    
+    (0.5*coupon)*exp(-spr1[val]*t1) + (coupon*0.5)*exp(-spr2[val]*t2) + (coupon*0.5)*exp(-spr3[val]*t3)+(coupon*0.5)*exp(-spr4[val]*t4)+(coupon*0.5)*exp(-spr5[val]*t5)+(coupon*0.5)*exp(-spr6[val]*t6)+(100+coupon*0.5)*exp(-spr7[1]*t7) - dp7[val]
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  spr7 <- c(spr7, new) 
+}
+
+spr7
+```
+
+
+```{r}
+#0.5 Sep 25
+coupon <- 0.5
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2
+t7 <- 50/365+3
+t8 <- (50+6*30)/365+3
+
+spr8 <- c()
+for (val in c(1:10)) {
+  
+  fn <- function(spr8){
+    
+    (0.5*coupon)*exp(-spr1[val]*t1) + (coupon*0.5)*exp(-spr2[val]*t2) + (coupon*0.5)*exp(-spr3[val]*t3)+(coupon*0.5)*exp(-spr4[val]*t4)+(coupon*0.5)*exp(-spr5[val]*t5)+(coupon*0.5)*exp(-spr6[val]*t6)+(coupon*0.5)*exp(-spr7[val]*t7)+(100+coupon*0.5)*exp(-spr8[1]*t8) - dp8[val]
+  
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  spr8 <- c(spr8, new) 
+}
+
+spr8
+```
+
+```{r}
+#0.25 Mar 26
+coupon <- 0.25
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2
+t7 <- 50/365+3
+t8 <- (50+6*30)/365+3
+t9 <- 50/365+4
+
+
+spr9 <- c()
+for (val in c(1:10)) {
+  
+  fn <- function(spr9){
+    
+    (0.5*coupon)*exp(-(spr1[val])*t1) + (coupon*0.5)*exp(-(spr2[val])*t2) + (coupon*0.5)*exp(-(spr3[val])*t3)+(coupon*0.5)*exp(-(spr4[val])*t4)+(coupon*0.5)*exp(-(spr5[val])*t5)+(coupon*0.5)*exp(-(spr6[val])*t6)+(coupon*0.5)*exp(-(spr7[val])*t7)+(coupon*0.5)*exp(-(spr8[val])*t8)+ (100+coupon*0.5)*exp(-spr9[1]*t9) - dp9[val]
+  
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  spr9 <- c(spr9, new) 
+}
+
+spr9
+```
+
+```{r}
+#1.00 Sep 26
+coupon <- 1.00
+
+#time to maturity
+t1 <- 50/365
+t2 <- (50+6*30)/365
+t3 <- 50/365+1
+t4 <- (50+6*30)/365+1
+t5 <- 50/365+2
+t6 <- (50+6*30)/365+2
+t7 <- 50/365+3
+t8 <- (50+6*30)/365+3
+t9 <- 50/365+4
+t10 <- (50+6*30)/365+4
+
+
+spr10 <- c()
+for (val in c(1:10)) {
+  
+  fn <- function(spr10){
+    
+    (0.5*coupon)*exp(-(spr1[val])*t1) + (coupon*0.5)*exp(-(spr2[val])*t2) + (coupon*0.5)*exp(-(spr3[val])*t3)+(coupon*0.5)*exp(-(spr4[val])*t4)+(coupon*0.5)*exp(-(spr5[val])*t5)+(coupon*0.5)*exp(-(spr6[val])*t6)+(coupon*0.5)*exp(-(spr7[val])*t7)+(coupon*0.5)*exp(-(spr8[val])*t8)+ (coupon*0.5)*exp(-(spr9[val])*t9) +(100+coupon*0.5)*exp(-spr10[1]*t10) -dp10[val]
+  
+  }
+   #solve the equation to find ytm
+  
+  t1 <- t1 - 1.2/365 # 12 days with 10 prices
+  new <- nleqslv(0, fn)$x
+  spr10 <- c(spr10, new) 
+}
+
+spr10
+```
+
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+
+time <- as.factor(c("Mar22","Aug22","Mar23","Aug23","Mar24","Sep24","Mar25","Sep25","Mar26","Sep26"))
+
+dataframe_4b <-data.frame(
+   spr1,
+    spr2, 
+   spr3,
+    spr4,
+  spr5,
+   spr6,
+  spr7,
+ spr8,
+  spr9,
+   spr10
+)
+df_transposeb = t(dataframe_4b)
+rownames(df_transposeb) <- NULL
+
+
+new_dfb <-data.frame(
+    time,
+   df_transposeb[,1],
+   df_transposeb[,2],
+   df_transposeb[,3],
+   df_transposeb[,4],
+   df_transposeb[,5],
+   df_transposeb[,6],
+   df_transposeb[,7],
+   df_transposeb[,8],
+   df_transposeb[,9],
+   df_transposeb[,10])
+
+
+colnames(new_dfb) <- c("Time","Mar22","Aug22","Mar23","Aug23","Mar24","Sep24","Mar25","Sep25","Mar26","Sep26")
+
+colors <- c("Jan10"="red","Jan11"="orange","Jan12"="yellow","Jan13"="green","Jan14"="blue","Jan17"="purple","Jan18"="pink","Jan19"="black","Jan20"="brown","Jan21"="grey")
+
+ggplot(new_dfb, aes(x=Time)) + 
+  geom_line(aes(y=Mar22, group=1, color="Jan10")) +
+  geom_line(aes(y=Aug22, group=1, color="Jan11")) + 
+  geom_line(aes(y=Mar23, group=1, color="Jan12")) +
+  geom_line(aes(y=Aug23, group=1, color="Jan13")) +
+  geom_line(aes(y=Mar24, group=1, color="Jan14")) +
+  geom_line(aes(y=Sep24, group=1, color="Jan17")) +
+  geom_line(aes(y=Mar25, group=1, color="Jan18")) +
+  geom_line(aes(y=Sep25, group=1, color="Jan19")) +
+  geom_line(aes(y=Mar26, group=1, color="Jan20")) +
+  geom_line(aes(y=Sep26, group=1, color="Jan21")) + 
+  scale_x_discrete(limits = c("Mar22","Aug22","Mar23","Aug23","Mar24","Sep24","Mar25","Sep25","Mar26","Sep26")) +
+  labs(x = "Time", y = "Spot rate", color = 'Date of data') +
+  scale_color_manual(values = colors) +
+  theme_bw() +
+  ggtitle("Spot curve") +
+   theme(plot.title = element_text(hjust = 0.5))+
+
+  # geom_point(aes(1, mean(spr1))) +
+  # geom_point(aes(2, mean(spr2))) +
+  # geom_point(aes(3, mean(spr3))) +
+  # geom_point(aes(4, mean(spr4))) +
+  # geom_point(aes(5, mean(spr5))) +
+  # geom_point(aes(6, mean(spr6))) +
+  # geom_point(aes(7, mean(spr7))) +
+  # geom_point(aes(8, mean(spr8))) +
+  # geom_point(aes(9, mean(spr9))) +
+  # geom_point(aes(10, mean(spr10))) +
+  geom_text(aes(1, mean(spr1)), label = "0.0251",nudge_y = -.004, nudge_x = -.001 , size = 3) +
+  geom_text(aes(2, mean(spr2)), label = "0.00709",nudge_y = -.001, size = 3)+
+  geom_text(aes(3, mean(spr3)), label = "0.01011",nudge_y = -.001, size = 3)+
+  geom_text(aes(4, mean(spr4)), label = "0.01111",nudge_y = -.001, size = 3)+
+  geom_text(aes(5, mean(spr5)), label = "0.01269",nudge_y = -.001, size = 3)+
+  geom_text(aes(6, mean(spr6)), label = "0.01342",nudge_y = -.001, size = 3)+
+  geom_text(aes(7, mean(spr7)), label = "0.01447",nudge_y = -.001, size = 3)+
+  geom_text(aes(8, mean(spr8)), label = "0.01487",nudge_y = -.001, size = 3)+
+  geom_text(aes(9, mean(spr9)), label = "0.01532",nudge_y = -.001, size = 3)+
+  geom_text(aes(10,mean(spr10)), label = "0.01590",nudge_y = -.001, size = 3)
+
+```
+
+
+```{r}
+# 1yr-1yr forward rate
+a <- 1
+yr1yr1 <- c()
+for (val in c(1:10)){
+  
+    y = ((1+spr4[val])^4)/(1+spr2[val]^2) - 1
+    
+    yr1yr1 <- c(yr1yr1,  y)
+    
+}
+yr1yr1
+
+```
+
+```{r}
+# 1yr-2yr forward rate
+a <- 1
+yr1yr2 <- c()
+for (val in c(1:10)){
+  
+    y = ((1+spr6[val])^6)/(1+spr2[val]^2) - 1
+    
+    yr1yr2 <- c(yr1yr2,  y)
+    
+}
+yr1yr2
+```
+
+```{r}
+# 1yr-3yr forward rate
+a <- 1
+yr1yr3 <- c()
+for (val in c(1:10)){
+  
+    y = ((1+spr8[val])^8)/(1+spr2[val]^2) - 1
+    
+    yr1yr3 <- c(yr1yr3,  y)
+    
+}
+yr1yr3
+```
+
+```{r}
+# 1yr-4yr forward rate
+a <- 1
+yr1yr4 <- c()
+for (val in c(1:10)){
+  
+    y = ((1+spr10[val])^10)/(1+spr2[val]^2) - 1
+    
+    yr1yr4 <- c(yr1yr4,  y)
+    
+}
+yr1yr4
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+
+time <- as.factor(c("Aug23","Sep24","Sep25","Sep26"))
+
+dataframe_4c <-data.frame(
+  yr1yr1,
+  yr1yr2,
+  yr1yr3,
+  yr1yr4
+)
+df_transposec = t(dataframe_4c)
+rownames(df_transposec) <- NULL
+
+
+new_dfc <-data.frame(
+    time,
+   df_transposec[,1],
+   df_transposec[,2],
+   df_transposec[,3],
+   df_transposec[,4],
+   df_transposec[,5],
+   df_transposec[,6],
+   df_transposec[,7],
+   df_transposec[,8],
+   df_transposec[,9],
+   df_transposec[,10]
+)
+
+
+colnames(new_dfc) <- c("Time","Mar22","Aug22","Mar23","Aug23","Mar24","Sep24","Mar25","Sep25","Mar26","Sep26")
+
+colors <- c("Jan10"="red","Jan11"="orange","Jan12"="yellow","Jan13"="green","Jan14"="blue","Jan17"="purple","Jan18"="pink","Jan19"="black","Jan20"="brown","Jan21"="grey")
+
+ggplot(new_dfc, aes(x=Time)) + 
+  geom_line(aes(y=Mar22, group=1, color="Jan10")) +
+  geom_line(aes(y=Aug22, group=1, color="Jan11")) + 
+  geom_line(aes(y=Mar23, group=1, color="Jan12")) +
+  geom_line(aes(y=Aug23, group=1, color="Jan13")) +
+  geom_line(aes(y=Mar24, group=1, color="Jan14")) +
+  geom_line(aes(y=Sep24, group=1, color="Jan17")) +
+  geom_line(aes(y=Mar25, group=1, color="Jan18")) +
+  geom_line(aes(y=Sep25, group=1, color="Jan19")) +
+  geom_line(aes(y=Mar26, group=1, color="Jan20")) +
+  geom_line(aes(y=Sep26, group=1, color="Jan21")) +
+  
+  scale_x_discrete(limits = c("Aug23","Sep24","Sep25","Sep26")) +
+  labs(x = "Time", y = "Forward rate", color = 'Date of data') +
+  scale_color_manual(values = colors) +
+  theme_bw() +
+  ggtitle("Forward rate curve") +
+   theme(plot.title = element_text(hjust = 0.5))+
+
+
+  geom_text(aes(1, mean(yr1yr1)), label = "0.0434",nudge_y = -.004, nudge_x = -.001 , size = 3) +
+
+  geom_text(aes(2, mean(yr1yr2)), label = "0.0803",nudge_y = -.008, size = 3)+
+
+  geom_text(aes(3, mean(yr1yr3)), label = "0.120",nudge_y = -.008, size = 3)+
+
+  geom_text(aes(4, mean(yr1yr4)), label = "0.165",nudge_y = -.008, size = 3)
+
+  
+```
+
+```{r}
+#5
+X1 = log_returns <- diff(log(ytm_Mar22), lag=1)
+X2 = log_returns <- diff(log(ytm_Mar23), lag=1)
+X3 = log_returns <- diff(log(ytm_Mar24), lag=1)
+X4 = log_returns <- diff(log(ytm_Mar25), lag=1)
+X5 = log_returns <- diff(log(ytm_Mar26), lag=1)
+
+data_5a  <- data.frame(X1, X2, X3, X4, X5)
+A = cov(data_5a)
+A
+```
+
+```{r}
+X1 = log_returns <- diff(log(yr1yr1), lag=1)
+X2 = log_returns <- diff(log(yr1yr2), lag=1)
+X3 = log_returns <- diff(log(yr1yr3), lag=1)
+X4 = log_returns <- diff(log(yr1yr4), lag=1)
+
+data_5b <- data.frame(X1, X2, X3, X4)
+B = cov(data_5b)
+B
+```
+
+
+```{r}
+#6
+eigen(A)
+
+eigen(B)
+```
+
